@@ -173,7 +173,8 @@ public class FramePrincipal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Por favor, ingrese un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
+        String texto = panelTexto.getText();
+        System.out.println(texto);
     }//GEN-LAST:event_jToggleButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
