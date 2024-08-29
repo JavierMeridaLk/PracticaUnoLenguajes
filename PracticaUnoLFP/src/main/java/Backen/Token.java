@@ -63,7 +63,7 @@ public class Token {
         
     }
     
-    public void nuevoToken(String palabra){
+    public Color nuevoToken(String palabra){
  
         try {
             Integer.parseInt(palabra);
@@ -141,5 +141,6 @@ public class Token {
                 }
             }
         }
+        return color;
     }
 }

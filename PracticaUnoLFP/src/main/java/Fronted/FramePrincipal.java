@@ -6,6 +6,10 @@ package Fronted;
 
 import Backen.Imagen;
 import javax.swing.JOptionPane;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 
 /**
  *
@@ -13,12 +17,15 @@ import javax.swing.JOptionPane;
  */
 public class FramePrincipal extends javax.swing.JFrame {
 
+    
+    private String textoAnterior = "";
     /**
      * Creates new form FramePrincipal
      */
     public FramePrincipal() {
         initComponents();
         this.setSize(950, 660);
+        
         
     }
 
@@ -145,38 +152,11 @@ public class FramePrincipal extends javax.swing.JFrame {
         ImgPanel.revalidate();
         ImgPanel.repaint();
         
+        
     }
+
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
          // Preguntar por el tamaño de la cuadrícula
-        /*
-        limpiar();
-        
-        String tamaño = JOptionPane.showInputDialog(null, 
-                "Ingrese el tamaño de la cuadrícula:", "Tamaño de la cuadrícula", 
-                JOptionPane.QUESTION_MESSAGE);
-        // Verificar si el usuario presionó "Cancelar" o dejó el cuadro de texto vacío
-        if (tamaño == null || tamaño.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Operación cancelada o entrada vacía.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        int tamañoInt;
-        
-        try {
-            
-            tamañoInt = Integer.parseInt(tamaño);
-            Imagen imagen = new Imagen();
-            imagen.crearCuadricula(ImgPanel,tamañoInt);
-            this.add(ImgPanel);
-            tamañoLabel.setText(tamañoInt + "x" + tamañoInt);
-            
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Por favor, ingrese un número válido.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        String texto = panelTexto.getText();
-        System.out.println(texto);
-    */
         limpiar();
         String filas = JOptionPane.showInputDialog(null, 
                 "Ingrese el número de filas:", "Tamaño de la cuadrícula", 
