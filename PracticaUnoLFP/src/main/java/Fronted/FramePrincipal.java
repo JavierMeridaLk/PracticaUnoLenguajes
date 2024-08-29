@@ -148,6 +148,7 @@ public class FramePrincipal extends javax.swing.JFrame {
     }
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
          // Preguntar por el tamaño de la cuadrícula
+        /*
         limpiar();
         
         String tamaño = JOptionPane.showInputDialog(null, 
@@ -175,6 +176,56 @@ public class FramePrincipal extends javax.swing.JFrame {
         }
         String texto = panelTexto.getText();
         System.out.println(texto);
+    */
+        limpiar();
+        String filas = JOptionPane.showInputDialog(null, 
+                "Ingrese el número de filas:", "Tamaño de la cuadrícula", 
+                JOptionPane.QUESTION_MESSAGE);
+        
+        // Verificar si el usuario presionó "Cancelar" o dejó el cuadro de texto vacío
+        if (filas == null || filas.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Operación cancelada o entrada vacía.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int filasInt;
+        try {
+            filasInt = Integer.parseInt(filas);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Por favor, ingrese un número válido para las filas.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Solicitar el número de columnas
+        String columnas = JOptionPane.showInputDialog(null, 
+                "Ingrese el número de columnas:", "Tamaño de la cuadrícula", 
+                JOptionPane.QUESTION_MESSAGE);
+
+        // Verificar si el usuario presionó "Cancelar" o dejó el cuadro de texto vacío
+        if (columnas == null || columnas.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Operación cancelada o entrada vacía.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        int columnasInt;
+        try {
+            columnasInt = Integer.parseInt(columnas);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, "Por favor, ingrese un número válido para las columnas.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Crear la cuadrícula usando el número de filas y columnas
+        Imagen imagen = new Imagen();
+        imagen.crearCuadricula(ImgPanel, filasInt, columnasInt);
+        this.add(ImgPanel);
+        tamañoLabel.setText(filasInt + "x" + columnasInt);
+
+        // Obtener el texto del panel de texto
+        String texto = panelTexto.getText();
+        System.out.println(texto);
+    
+
     }//GEN-LAST:event_jToggleButton1ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
