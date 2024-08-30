@@ -5,8 +5,13 @@
 package Backen;
 
 import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -98,6 +103,35 @@ public class Imagen {
     */
 
     return tamaños;
-}
+    }
+   
+   public void exportarImagen(JPanel ImgPanel){
+       
+       File carpeta = new File("Imagenes");
+            if (!carpeta.exists()) {
+                carpeta.mkdirs(); // Crear la carpeta y sus subcarpetas si no existen
+            }
+            
+       
+       BufferedImage image = new BufferedImage(ImgPanel.getWidth(), ImgPanel.getHeight(), BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g2d = image.createGraphics();
+                ImgPanel.paint(g2d);
+                g2d.dispose();
+
+                // Guardar la imagen en un archivo
+                try {
+                    String nombre = JOptionPane.showInputDialog(null, 
+                    "Ingrese un nombre para la imagen:", "Nombre", 
+                    JOptionPane.QUESTION_MESSAGE);
+                    File archivo = new File(carpeta, nombre);
+                    
+                    ImageIO.write(image, "png", archivo);
+                    JOptionPane.showMessageDialog(null, "Imagen guardada como: "+ nombre + ", en la carpeta: "+ carpeta , "Exito", JOptionPane.INFORMATION_MESSAGE);
+                   
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Error al guardar la imagen: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+   }
     
 }

@@ -15,6 +15,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextPane;
+import javax.swing.JToggleButton;
 import javax.swing.border.Border;
 
 /**
@@ -29,7 +30,7 @@ public class Analizador {
         
     }
     
-    public void analizarCodigoFuente(String texto, int cantidadDeToken, JPanel panel){
+    public void analizarCodigoFuente(String texto, int cantidadDeToken, JPanel panel, JToggleButton boton){
         
         if (!texto.isEmpty()) {
             //obtener la cantidad de palabras y las mismas
@@ -66,6 +67,7 @@ public class Analizador {
                         
                     }
                 }
+                boton.setEnabled(true);
             }else{
                 JOptionPane.showMessageDialog(null, "La cantidad de tokens ingresados superan la cuadricula ingresada por: " + (cantidadDePalabras-cantidadDeToken),
                         "Error", JOptionPane.ERROR_MESSAGE);
