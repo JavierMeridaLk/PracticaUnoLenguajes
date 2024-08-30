@@ -5,6 +5,8 @@
 package Backen;
 
 import java.awt.Color;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -69,84 +71,87 @@ public class Token {
     public JLabel nuevoToken(String palabra){
  
         JLabel label = new JLabel();
-        try {
-            Integer.parseInt(palabra);
-            color = Color.decode(COLOR_ENTERO);
-            
-        } catch (NumberFormatException e1) {
-            // Si no es un entero, verificar si es un decimal
+                    
             try {
-                Double.parseDouble(palabra);
-                color = Color.decode(COLOR_DECIMAL);
-            } catch (NumberFormatException e2) {
-                if (palabra.equalsIgnoreCase("+")) {
-                    color = Color.decode(COLOR_SUMA);
-                }else if (palabra.equals("-")) {
-                    color=Color.decode(COLOR_RESTA);
-                }else if (palabra.equals("^")) {
-                    color=Color.decode(COLOR_EXPONENTE);
-                }else if (palabra.equals("/")) {
-                    color=Color.decode(COLOR_DIVISION);
-                }else if (palabra.equals("Mod")) {
-                    color=Color.decode(COLOR_MODULO);
-                }else if (palabra.equals("*")) {
-                    color=Color.decode(COLOR_MULTIPLICACION);
-                }else if (palabra.equals("==")) {
-                    color=Color.decode(COLOR_IGUAL);
-                }else if (palabra.equals("<>")) {
-                    color=Color.decode(COLOR_DIFERENTE);
-                }else if (palabra.equals(">")) {
-                    color=Color.decode(COLOR_MAYOR_QUE);
-                }else if (palabra.equals("<")) {
-                    color=Color.decode(COLOR_MENOR_QUE);
-                }else if (palabra.equals(">=")) {
-                    color=Color.decode(COLOR_MAYOR_IGUAL);
-                }else if (palabra.equals("<=")) {
-                    color=Color.decode(COLOR_MENOR_IGUAL);
-                }else if (palabra.equals("And")) {
-                    color=Color.decode(COLOR_AND);
-                }else if (palabra.equals("Or")) {
-                    color=Color.decode(COLOR_OR);
-                }else if (palabra.equals("Not")) {
-                    color=Color.decode(COLOR_NOT);
-                }else if (palabra.equals("=")) {
-                    color=Color.decode(COLOR_ASIGNACION_SIMPLE);
-                }else if (palabra.equals("+=") || palabra.equals("-=") || palabra.equals("*=") || palabra.equals("/=")) {
-                    color=Color.decode(COLOR_ASIGNACION_COMPUESTA);
-                }else if (palabra.equals("Module") || palabra.equals("End") || palabra.equals("Sub") || palabra.equals("Main") || 
-                        palabra.equals("Dim") || palabra.equals("As") || palabra.equals("Integer") || palabra.equals("String") || 
-                        palabra.equals("Boolean") || palabra.equals("Double") || palabra.equals("Char") || palabra.equals("Console.WriteLine") || 
-                        palabra.equals("Console.ReadLine") || palabra.equals("If") || palabra.equals("ElseIf") || palabra.equals("Else") || 
-                        palabra.equals("Then") || palabra.equals("While") || palabra.equals("Do") || palabra.equals("Loop") || 
-                        palabra.equals("For") || palabra.equals("To") || palabra.equals("Next") || palabra.equals("Function") || 
-                        palabra.equals("Return") || palabra.equals("Const") ) {
-                    color=Color.decode(COLOR_PALABRA_RESERVADA);
-                }else if (palabra.equals("(") || palabra.equals(")") ) {
-                    color=Color.decode(COLOR_PARENTESIS);
-                }else if (palabra.equals("{") || palabra.equals("}") ) {
-                    color=Color.decode(COLOR_LLAVES);
-                }else if (palabra.equals("[") || palabra.equals("]") ) {
-                    color=Color.decode(COLOR_CORCHETES);
-                }else if (palabra.equals(",")) {
-                    color=Color.decode(COLOR_COMA);
-                }else if (palabra.equals(".")) {
-                    color=Color.decode(COLOR_PUNTO);
-                }else if (palabra.equals("True") || palabra.equals("False")) {
-                    color=Color.decode(COLOR_BOOLEANO);
-                }else if (palabra.charAt(0) == '"' ) {
-                    color=Color.decode(COLOR_CADENA);
-                }else if (palabra.charAt(0) == '‘') {
-                    color=Color.decode(COLOR_COMENTARIO);
-                }else if (palabra.charAt(0) == SIGNO_COMENTARIO_CARACTER && palabra.charAt(palabra.length()-1)== SIGNO_COMENTARIO_CARACTER) {
-                    color=Color.decode(COLOR_CARACTER);
-                }else if (!Character.isDigit(palabra.charAt(0))) {
-                    color=Color.decode(COLOR_IDENTIFICADOR);
-                }else{
-                    JOptionPane.showMessageDialog(null, "Token no aceptado: " + palabra, "Error", JOptionPane.ERROR_MESSAGE);
-                    return null;
+                Integer.parseInt(palabra);
+                color = Color.decode(COLOR_ENTERO);
+
+            } catch (NumberFormatException e1) {
+                // Si no es un entero, verificar si es un decimal
+                try {
+                    Double.parseDouble(palabra);
+                    color = Color.decode(COLOR_DECIMAL);
+                } catch (NumberFormatException e2) {
+                    if (palabra.equalsIgnoreCase("+")) {
+                        color = Color.decode(COLOR_SUMA);
+                    }else if (palabra.equals("-")) {
+                        color=Color.decode(COLOR_RESTA);
+                    }else if (palabra.equals("^")) {
+                        color=Color.decode(COLOR_EXPONENTE);
+                    }else if (palabra.equals("/")) {
+                        color=Color.decode(COLOR_DIVISION);
+                    }else if (palabra.equals("Mod")) {
+                        color=Color.decode(COLOR_MODULO);
+                    }else if (palabra.equals("*")) {
+                        color=Color.decode(COLOR_MULTIPLICACION);
+                    }else if (palabra.equals("==")) {
+                        color=Color.decode(COLOR_IGUAL);
+                    }else if (palabra.equals("<>")) {
+                        color=Color.decode(COLOR_DIFERENTE);
+                    }else if (palabra.equals(">")) {
+                        color=Color.decode(COLOR_MAYOR_QUE);
+                    }else if (palabra.equals("<")) {
+                        color=Color.decode(COLOR_MENOR_QUE);
+                    }else if (palabra.equals(">=")) {
+                        color=Color.decode(COLOR_MAYOR_IGUAL);
+                    }else if (palabra.equals("<=")) {
+                        color=Color.decode(COLOR_MENOR_IGUAL);
+                    }else if (palabra.equals("And")) {
+                        color=Color.decode(COLOR_AND);
+                    }else if (palabra.equals("Or")) {
+                        color=Color.decode(COLOR_OR);
+                    }else if (palabra.equals("Not")) {
+                        color=Color.decode(COLOR_NOT);
+                    }else if (palabra.equals("=")) {
+                        color=Color.decode(COLOR_ASIGNACION_SIMPLE);
+                    }else if (palabra.equals("+=") || palabra.equals("-=") || palabra.equals("*=") || palabra.equals("/=")) {
+                        color=Color.decode(COLOR_ASIGNACION_COMPUESTA);
+                    }else if (palabra.equals("Module") || palabra.equals("End") || palabra.equals("Sub") || palabra.equals("Main") || 
+                            palabra.equals("Dim") || palabra.equals("As") || palabra.equals("Integer") || palabra.equals("String") || 
+                            palabra.equals("Boolean") || palabra.equals("Double") || palabra.equals("Char") || palabra.equals("Console.WriteLine") || 
+                            palabra.equals("Console.ReadLine") || palabra.equals("If") || palabra.equals("ElseIf") || palabra.equals("Else") || 
+                            palabra.equals("Then") || palabra.equals("While") || palabra.equals("Do") || palabra.equals("Loop") || 
+                            palabra.equals("For") || palabra.equals("To") || palabra.equals("Next") || palabra.equals("Function") || 
+                            palabra.equals("Return") || palabra.equals("Const") ) {
+                        color=Color.decode(COLOR_PALABRA_RESERVADA);
+                    }else if (palabra.equals("(") || palabra.equals(")") ) {
+                        color=Color.decode(COLOR_PARENTESIS);
+                    }else if (palabra.equals("{") || palabra.equals("}") ) {
+                        color=Color.decode(COLOR_LLAVES);
+                    }else if (palabra.equals("[") || palabra.equals("]") ) {
+                        color=Color.decode(COLOR_CORCHETES);
+                    }else if (palabra.equals(",")) {
+                        color=Color.decode(COLOR_COMA);
+                    }else if (palabra.equals(".")) {
+                        color=Color.decode(COLOR_PUNTO);
+                    }else if (palabra.equals("True") || palabra.equals("False")) {
+                        color=Color.decode(COLOR_BOOLEANO);
+                    }else if (palabra.charAt(0) == '"' ) {
+                        color=Color.decode(COLOR_CADENA);
+                    }else if (palabra.charAt(0) == '‘') {
+                        color=Color.decode(COLOR_COMENTARIO);
+                    }else if (palabra.charAt(0) == SIGNO_COMENTARIO_CARACTER && palabra.charAt(palabra.length()-1)== SIGNO_COMENTARIO_CARACTER) {
+                        color=Color.decode(COLOR_CARACTER);
+                    }else if (!Character.isDigit(palabra.charAt(0))) {
+                        color=Color.decode(COLOR_IDENTIFICADOR);
+                    }else if (palabra.equals("=")) {
+                        color=Color.decode(COLOR_ASIGNACION_SIMPLE);
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Token no aceptado: " + palabra, "Error", JOptionPane.ERROR_MESSAGE);
+                        return null;
+                    }
                 }
             }
-        }
         Border border = BorderFactory.createLineBorder(Color.BLACK, 1); 
         label.setBorder(border);
         label.setOpaque(true); // Necesario para que el color de fondo sea visible
@@ -154,3 +159,4 @@ public class Token {
         return label;
     }
 }
+
