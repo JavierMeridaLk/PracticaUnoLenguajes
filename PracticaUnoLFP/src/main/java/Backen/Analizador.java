@@ -5,10 +5,16 @@
 package Backen;
 
 import java.awt.Color;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import javax.swing.BorderFactory;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextPane;
 import javax.swing.border.Border;
 
 /**
@@ -17,6 +23,8 @@ import javax.swing.border.Border;
  */
 public class Analizador {
     
+     private String nombreDelArchivo;
+     
     public Analizador(){
         
     }
@@ -69,5 +77,39 @@ public class Analizador {
             JOptionPane.showMessageDialog(null, "El codigo fuente esta vacio.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }  
+    }
+    public File abrirChose(){
+        
+        
+        JFileChooser fileChooser = new JFileChooser();
+         
+        int seleccion = fileChooser.showOpenDialog(null);
+    
+        if (seleccion == JFileChooser.APPROVE_OPTION) {
+            File archivo = fileChooser.getSelectedFile();
+
+            nombreDelArchivo= archivo.getName();
+        
+            return archivo;
+        } else {
+            JOptionPane.showMessageDialog(null, "No se seleccionó ningún archivo.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+        }
+    
+        return null;
+    
+    }
+    public void leer(JTextPane text){
+        File archivo = abrirChose();
+        try (BufferedReader reader = new BufferedReader(new FileReader(archivo))) {
+                String line;
+                StringBuilder content = new StringBuilder();
+                while ((line = reader.readLine()) != null) {
+                    content.append(line).append("\n");
+                }
+                text.setText(content.toString());
+            } catch (IOException e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error al leer el archivo: ", "Error", JOptionPane.ERROR_MESSAGE);
+            }
     }
 }

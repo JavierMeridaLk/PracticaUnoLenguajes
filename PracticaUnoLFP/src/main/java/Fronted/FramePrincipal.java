@@ -19,17 +19,19 @@ import javax.swing.text.Document;
 public class FramePrincipal extends javax.swing.JFrame {
 
     private int cantidadDeTokens;
-    
-    private String textoAnterior = "";
+    private Analizador analizador;
     /**
      * Creates new form FramePrincipal
      */
     public FramePrincipal() {
+        this.setLocationRelativeTo(null);
+        //asignar un titulo al frame principal
+        this.setTitle("ANALIZADOR LEXICO");
         initComponents();
         cantidadDeTokens=0;
         this.setSize(950, 660);
         panelTexto.setEditable(false);
-        
+        this.analizador = new Analizador();
     }
 
     /**
@@ -197,52 +199,11 @@ public class FramePrincipal extends javax.swing.JFrame {
     
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
          // Preguntar por el tamaño de la cuadrícula
-        limpiar();
-        String filas = JOptionPane.showInputDialog(null, 
-                "Ingrese el número de filas:", "Tamaño de la cuadrícula", 
-                JOptionPane.QUESTION_MESSAGE);
         
-        // Verificar si el usuario presionó "Cancelar" o dejó el cuadro de texto vacío
-        if (filas == null || filas.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Operación cancelada o entrada vacía.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        int filasInt;
-        try {
-            filasInt = Integer.parseInt(filas);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Por favor, ingrese un número válido para las filas.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        // Solicitar el número de columnas
-        String columnas = JOptionPane.showInputDialog(null, 
-                "Ingrese el número de columnas:", "Tamaño de la cuadrícula", 
-                JOptionPane.QUESTION_MESSAGE);
-
-        // Verificar si el usuario presionó "Cancelar" o dejó el cuadro de texto vacío
-        if (columnas == null || columnas.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Operación cancelada o entrada vacía.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        int columnasInt;
-        try {
-            columnasInt = Integer.parseInt(columnas);
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(null, "Por favor, ingrese un número válido para las columnas.", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
+        iniciarTablero();
 
         // Crear la cuadrícula usando el número de filas y columnas
-        Imagen imagen = new Imagen();
-        imagen.crearCuadricula(ImgPanel, filasInt, columnasInt);
-        this.add(ImgPanel);
-        tamañoLabel.setText(filasInt + "x" + columnasInt);
-        cantidadDeTokens= filasInt*columnasInt;
-        System.out.println(cantidadDeTokens);
-        panelTexto.setEditable(true);
+        
 
         // Obtener el texto del panel de texto
         String texto = panelTexto.getText();
@@ -251,16 +212,32 @@ public class FramePrincipal extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jToggleButton1ActionPerformed
 
+    private void iniciarTablero(){
+        limpiar();
+        Imagen imagen = new Imagen();
+        int[] posiciones = imagen.crearCuadricula(ImgPanel);
+        this.add(ImgPanel);
+        
+        tamañoLabel.setText(posiciones[0] + "x" + posiciones[1]);
+        cantidadDeTokens= posiciones[0]*posiciones[1];
+        System.out.println(cantidadDeTokens);
+        panelTexto.setEditable(true);
+    }
+    
     private void jToggleButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton3ActionPerformed
         // TODO add your handling code here:
         ImgPanel.removeAll();
         String texto = panelTexto.getText().trim();
-        Analizador analizador = new Analizador();
+        
         analizador.analizarCodigoFuente(texto,cantidadDeTokens,ImgPanel);
     }//GEN-LAST:event_jToggleButton3ActionPerformed
 
     private void jToggleButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton4ActionPerformed
         // TODO add your handling code here:
+        iniciarTablero();
+        analizador.leer(panelTexto);
+        
+        
     }//GEN-LAST:event_jToggleButton4ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
