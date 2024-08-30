@@ -5,7 +5,10 @@
 package Backen;
 
 import java.awt.Color;
+import javax.swing.BorderFactory;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.border.Border;
 
 /**
  *
@@ -47,10 +50,10 @@ public class Token {
     private final String COLOR_COMENTARIO = "#B3B3B3";
     
     private final String COLOR_PARENTESIS = "#9AD8DB";
-    private final String COLOR_LLAVES = "#DBS29A";
+    private final String COLOR_LLAVES = "#DBD29A";
     private final String COLOR_CORCHETES = "#DBA49A";
     private final String COLOR_COMA = "#B79ADB";
-    private final String COLOR_PUNTO = "#0050EF";
+    private final String COLOR_PUNTO = "#9ADBA6";
     
     private final char SIGNO_COMENTARIO_CARACTER = '\'' ;
     
@@ -63,11 +66,13 @@ public class Token {
         
     }
     
-    public Color nuevoToken(String palabra){
+    public JLabel nuevoToken(String palabra){
  
+        JLabel label = new JLabel();
         try {
             Integer.parseInt(palabra);
             color = Color.decode(COLOR_ENTERO);
+            
         } catch (NumberFormatException e1) {
             // Si no es un entero, verificar si es un decimal
             try {
@@ -130,17 +135,22 @@ public class Token {
                     color=Color.decode(COLOR_BOOLEANO);
                 }else if (palabra.charAt(0) == '"' ) {
                     color=Color.decode(COLOR_CADENA);
-                }else if (palabra.charAt(0) == SIGNO_COMENTARIO_CARACTER) {
+                }else if (palabra.charAt(0) == '‘') {
                     color=Color.decode(COLOR_COMENTARIO);
-                }else if (palabra.charAt(0) == SIGNO_COMENTARIO_CARACTER && palabra.charAt(palabra.length())== SIGNO_COMENTARIO_CARACTER) {
+                }else if (palabra.charAt(0) == SIGNO_COMENTARIO_CARACTER && palabra.charAt(palabra.length()-1)== SIGNO_COMENTARIO_CARACTER) {
                     color=Color.decode(COLOR_CARACTER);
                 }else if (!Character.isDigit(palabra.charAt(0))) {
                     color=Color.decode(COLOR_IDENTIFICADOR);
                 }else{
                     JOptionPane.showMessageDialog(null, "Token no aceptado: " + palabra, "Error", JOptionPane.ERROR_MESSAGE);
+                    return null;
                 }
             }
         }
-        return color;
+        Border border = BorderFactory.createLineBorder(Color.BLACK, 1); 
+        label.setBorder(border);
+        label.setOpaque(true); // Necesario para que el color de fondo sea visible
+        label.setBackground(color);
+        return label;
     }
 }
