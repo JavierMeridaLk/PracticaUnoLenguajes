@@ -3,8 +3,11 @@ package Fronted;
 import Backen.Analizador;
 import Backen.Imagen;
 import java.awt.Color;
+import javax.swing.JTextPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.Element;
+import javax.swing.text.StyledDocument;
 
 public class FramePrincipal extends javax.swing.JFrame {
 
@@ -54,6 +57,24 @@ public class FramePrincipal extends javax.swing.JFrame {
                 TextPanelLineas.setText(textoFinal);
             }
         });
+        
+        panelTexto.addCaretListener(e -> {
+                int dot = e.getDot(); // Posición del cursor
+                try {
+                    // Obtener el documento
+                    JTextPane textPane1 = (JTextPane) e.getSource();
+                    StyledDocument doc = textPane1.getStyledDocument();
+                    // Obtener la ubicación de la posición del cursor
+                    Element element = doc.getDefaultRootElement();
+                    int line = element.getElementIndex(dot); // Fila
+                    int column = dot - element.getElement(line).getStartOffset(); // Columna
+                    // Actualizar la etiqueta con la posición
+                    LabelColumna.setText(String.valueOf(column ));
+                    LabelFila.setText(String.valueOf(line + 1));
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            });
     }
     
     @SuppressWarnings("unchecked")
