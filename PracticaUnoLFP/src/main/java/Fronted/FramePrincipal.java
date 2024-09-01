@@ -2,6 +2,9 @@ package Fronted;
 
 import Backen.Analizador;
 import Backen.Imagen;
+import java.awt.Color;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 public class FramePrincipal extends javax.swing.JFrame {
 
@@ -10,9 +13,10 @@ public class FramePrincipal extends javax.swing.JFrame {
     
     public FramePrincipal() {
         
+        this.setSize(986, 640);
         this.setLocationRelativeTo(null);
         this.setTitle("ANALIZADOR LEXICO");
-        this.setSize(950, 660);
+        
         
         initComponents();
         
@@ -20,12 +24,43 @@ public class FramePrincipal extends javax.swing.JFrame {
         panelTexto.setEditable(false);
         this.analizador = new Analizador();
         botonExportar.setEnabled(false);
+        TextPanelLineas.setEditable(false);
+        TextPanelLineas.setForeground(Color.LIGHT_GRAY);
+
+        panelTexto.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                actualizarConteoLineas();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                actualizarConteoLineas();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                actualizarConteoLineas();
+            }
+            // Método para actualizar el contador de líneas
+            private void actualizarConteoLineas() {
+                
+                int lineCount = panelTexto.getDocument().getDefaultRootElement().getElementCount();  // Obtener el número de líneas
+                String textoFinal="";
+
+                for (int i = 0; i < lineCount; i++) {
+                    textoFinal=textoFinal+String.valueOf((i+1)+"\n");   
+                }
+                TextPanelLineas.setText(textoFinal);
+            }
+        });
     }
     
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel5 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         panelTexto = new javax.swing.JTextPane();
         ImgPanel = new javax.swing.JPanel();
@@ -37,6 +72,14 @@ public class FramePrincipal extends javax.swing.JFrame {
         tamañoLabel = new javax.swing.JLabel();
         jToggleButton3 = new javax.swing.JToggleButton();
         jToggleButton4 = new javax.swing.JToggleButton();
+        jLabel4 = new javax.swing.JLabel();
+        LabelFila = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        LabelColumna = new javax.swing.JLabel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        TextPanelLineas = new javax.swing.JTextPane();
+
+        jLabel5.setText("jLabel5");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -98,22 +141,42 @@ public class FramePrincipal extends javax.swing.JFrame {
             }
         });
 
+        jLabel4.setText("Fila: ");
+
+        jLabel6.setText("Columna: ");
+
+        jScrollPane2.setViewportView(TextPanelLineas);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
                 .addGap(341, 341, 341))
             .addGroup(layout.createSequentialGroup()
-                .addGap(14, 14, 14)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jToggleButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jToggleButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(botonExportar))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel2))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(3, 3, 3)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(ImgPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -122,15 +185,15 @@ public class FramePrincipal extends javax.swing.JFrame {
                                 .addComponent(tamañoLabel)
                                 .addGap(43, 43, 43))))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jToggleButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jToggleButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(botonExportar)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addGap(239, 239, 239)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(LabelFila)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(LabelColumna)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -150,9 +213,19 @@ public class FramePrincipal extends javax.swing.JFrame {
                         .addComponent(jLabel3)
                         .addComponent(tamañoLabel)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(ImgPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
+                            .addComponent(jScrollPane2))
+                        .addGap(1, 1, 1)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(LabelFila)
+                            .addComponent(jLabel6)
+                            .addComponent(LabelColumna)))
+                    .addComponent(ImgPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
 
         pack();
@@ -174,11 +247,14 @@ public class FramePrincipal extends javax.swing.JFrame {
 
     private void limpiar(){
         //metodo para limpiar componentes
+        LabelColumna.setText("");
+        LabelFila.setText("");
         tamañoLabel.setText("");
         ImgPanel.removeAll();
         ImgPanel.revalidate();
         ImgPanel.repaint();
         panelTexto.setText("");  
+        TextPanelLineas.setText("");  
     }
     
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
@@ -214,11 +290,18 @@ public class FramePrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jToggleButton4ActionPerformed
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel ImgPanel;
+    private javax.swing.JLabel LabelColumna;
+    private javax.swing.JLabel LabelFila;
+    private javax.swing.JTextPane TextPanelLineas;
     private javax.swing.JToggleButton botonExportar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JToggleButton jToggleButton3;
     private javax.swing.JToggleButton jToggleButton4;
