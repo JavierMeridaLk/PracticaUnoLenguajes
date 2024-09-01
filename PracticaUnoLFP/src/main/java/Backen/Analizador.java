@@ -17,7 +17,7 @@ import javax.swing.border.Border;
 public class Analizador {
     
     private String nombreDelArchivo;
-        
+          
     public Analizador(){
         
     }
@@ -25,18 +25,56 @@ public class Analizador {
     public void analizarCodigoFuente(String texto, int cantidadDeToken, JPanel panel, JToggleButton boton){
         
         if (!texto.isEmpty()) {
-            //obtener la cantidad de palabras y las mismas
-            String textoSinEspacios = texto.replaceAll("\\s+", " ").trim();
-            String[] palabras = textoSinEspacios.split("(?<=\\b)(?=[(){}\\[\\],])|(?<=[(){}\\[\\],])|(?<=\\d)(?=\\D)|(?<=\\d\\.\\d+)(?=\\D)|(?<=\\d\\.\\d+)|\\s+");
-
-            int cantidadDePalabras = palabras.length;
+            // Obtener lineas y evaluar si es un comnetario o no, luego separar por palabras
+            String[] lineas = texto.split("\n");
+            String[] lineasSinEspacios =new String[lineas.length];
+            
+             for (int i = 0; i < lineas.length; i++) {
+                // Eliminar espacios al inicio y al final de cada línea y reemplazar múltiples espacios en blanco con uno solo
+                lineasSinEspacios[i] = lineas[i].trim().replaceAll("\\s+", " ");
+                if (!lineasSinEspacios[i].isEmpty() && lineasSinEspacios[i].charAt(0) == '\'') {
+                    lineasSinEspacios[i] = "'";
+                }
+            }
+            
+            int totalPalabras = 0;
+            for (String linea : lineasSinEspacios) {
+                totalPalabras += linea.split(" ").length;
+            }
+            
+            String[] palabras = new String[totalPalabras];
+            int indice = 0;
+            
+            for (String linea : lineasSinEspacios) {
+                String[] palabrasLinea = linea.split(" ");
+                for (String palabra : palabrasLinea) {
+                    palabras[indice++] = palabra;
+                }
+            }
+            // Contar el número total de tokens después de la división
+            int totalPalabrasVerificadas = 0;
+            // Primero, contar el número total de tokens para asignar un array de tamaño adecuado
+            for (String palabra : palabras) {
+                totalPalabrasVerificadas += palabra.split("(?<=\\b)(?=[(){}\\[\\],])|(?<=[(){}\\[\\],])|(?<=\\s)(?=[(){}\\[\\],])|(?<=\\s)(?=\\s)").length;
+            }
+            // Crear un array para almacenar todos los tokens verificadas
+            String[] palabrasVerificadas = new String[totalPalabrasVerificadas];
+            int index = 0;
+            // Dividir las palabras y almacenar en el array
+            for (String palabra : palabras) {
+                String[] tokens = palabra.split("(?<=\\b)(?=[(){}\\[\\],])|(?<=[(){}\\[\\],])|(?<=\\s)(?=[(){}\\[\\],])|(?<=\\s)(?=\\s)");
+                for (String token : tokens) {
+                    palabrasVerificadas[index++] = token;
+                }
+            }
+            
+            int cantidadDePalabras = palabrasVerificadas.length;
                
             if (cantidadDeToken>=cantidadDePalabras) {
                 //realiza el analicis si la cantidad de token son igual o mayores a la cantidad de palabras ingresadas
-                for (int i = 0; i < palabras.length; i++) {
-                    
+                for (int i = 0; i < palabrasVerificadas.length; i++) {
                     Token token = new Token();
-                    panel.add(token.nuevoToken(palabras[i]));
+                    panel.add(token.nuevoToken(palabrasVerificadas[i]));
                     panel.revalidate();
                     panel.repaint();   
                 }

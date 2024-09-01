@@ -16,10 +16,11 @@ public class FramePrincipal extends javax.swing.JFrame {
     
     public FramePrincipal() {
         
-        this.setSize(1000, 640);
+        this.setSize(986, 640);
         this.setLocationRelativeTo(null);
         this.setTitle("ANALIZADOR LEXICO");
-       
+        
+        
         initComponents();
         
         cantidadDeTokens=0;
@@ -76,7 +77,7 @@ public class FramePrincipal extends javax.swing.JFrame {
             });
     }
     
-
+    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 

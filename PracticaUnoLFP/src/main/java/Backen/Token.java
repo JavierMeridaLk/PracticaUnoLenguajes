@@ -127,7 +127,7 @@ public class Token {
                     color=Color.decode(COLOR_BOOLEANO);
                 }else if (palabra.charAt(0) == '"' ) {
                     color=Color.decode(COLOR_CADENA);
-                }else if (palabra.charAt(0) == '‘') {
+                }else if (palabra.charAt(0) == SIGNO_COMENTARIO_CARACTER) {
                     color=Color.decode(COLOR_COMENTARIO);
                 }else if (palabra.charAt(0) == SIGNO_COMENTARIO_CARACTER && palabra.charAt(palabra.length()-1)== SIGNO_COMENTARIO_CARACTER) {
                     color=Color.decode(COLOR_CARACTER);
