@@ -90,8 +90,7 @@ public class Analizador {
                 JTable tabla = new JTable(model);
                 tabla.setSize(740, 430);
                 tabla.setEnabled(false);
-                Object[] nombre = {"Token", "Lexema", "Linea", "Columna", "Cuadro"};
-                model.addRow(nombre);
+                
                 
                 
                 for (int i = 0; i < palabrasVerificadas.length; i++) {

@@ -71,12 +71,13 @@ public class Token {
         try {
             Integer.parseInt(palabra);
             color = Color.decode(COLOR_ENTERO);
+            token="Entero";
         } catch (NumberFormatException e1) {
         // Si no es un entero, verificar si es un decimal
             try {
                 Double.parseDouble(palabra);
                 color = Color.decode(COLOR_DECIMAL);
-                token="";
+                token="Decimal";
                 } catch (NumberFormatException e2) {
                     
                 if (palabra.equalsIgnoreCase("+")) {
@@ -95,28 +96,40 @@ public class Token {
                     token="Modulo";
                     color=Color.decode(COLOR_MODULO);
                 }else if (palabra.equals("*")) {
+                    token="Multiplicacion";
                     color=Color.decode(COLOR_MULTIPLICACION);
                 }else if (palabra.equals("==")) {
+                    token="Igual";
                     color=Color.decode(COLOR_IGUAL);
                 }else if (palabra.equals("<>")) {
+                    token="Diferente";
                     color=Color.decode(COLOR_DIFERENTE);
                 }else if (palabra.equals(">")) {
+                    token="Mayor que";
                     color=Color.decode(COLOR_MAYOR_QUE);
                 }else if (palabra.equals("<")) {
+                    token="Menor que";
                     color=Color.decode(COLOR_MENOR_QUE);
                 }else if (palabra.equals(">=")) {
+                    token="Mayor o Igual que";
                     color=Color.decode(COLOR_MAYOR_IGUAL);
                 }else if (palabra.equals("<=")) {
+                    token="Menor o Igual que";
                     color=Color.decode(COLOR_MENOR_IGUAL);
                 }else if (palabra.equals("And")) {
+                    token="Y";
                     color=Color.decode(COLOR_AND);
                 }else if (palabra.equals("Or")) {
+                    token="O";
                     color=Color.decode(COLOR_OR);
                 }else if (palabra.equals("Not")) {
+                    token="Negación";
                     color=Color.decode(COLOR_NOT);
                 }else if (palabra.equals("=")) {
+                    token="Asignacion Simple";
                     color=Color.decode(COLOR_ASIGNACION_SIMPLE);
                 }else if (palabra.equals("+=") || palabra.equals("-=") || palabra.equals("*=") || palabra.equals("/=")) {
+                    token="Asignacion Compuesta";
                     color=Color.decode(COLOR_ASIGNACION_COMPUESTA);
                 }else if (palabra.equals("Module") || palabra.equals("End") || palabra.equals("Sub") || palabra.equals("Main") || 
                         palabra.equals("Dim") || palabra.equals("As") || palabra.equals("Integer") || palabra.equals("String") || 
@@ -125,29 +138,38 @@ public class Token {
                         palabra.equals("Then") || palabra.equals("While") || palabra.equals("Do") || palabra.equals("Loop") || 
                         palabra.equals("For") || palabra.equals("To") || palabra.equals("Next") || palabra.equals("Function") || 
                         palabra.equals("Return") || palabra.equals("Const") ) {
+                    token="Palabra Reservada";
                     color=Color.decode(COLOR_PALABRA_RESERVADA);
                 }else if (palabra.equals("(") || palabra.equals(")") ) {
+                    token="Paréntesis";
                     color=Color.decode(COLOR_PARENTESIS);
                 }else if (palabra.equals("{") || palabra.equals("}") ) {
+                    token="Llaves";
                     color=Color.decode(COLOR_LLAVES);
                 }else if (palabra.equals("[") || palabra.equals("]") ) {
+                    token="Corchetes";
                     color=Color.decode(COLOR_CORCHETES);
                 }else if (palabra.equals(",")) {
+                    token="Coma";
                     color=Color.decode(COLOR_COMA);
                 }else if (palabra.equals(".")) {
+                    token="Punto";
                     color=Color.decode(COLOR_PUNTO);
                 }else if (palabra.equals("True") || palabra.equals("False")) {
+                    token="Booleano";
                     color=Color.decode(COLOR_BOOLEANO);
                 }else if (palabra.charAt(0) == '"' ) {
+                    token="Cadena";
                     color=Color.decode(COLOR_CADENA);
                 }else if (palabra.charAt(0) == SIGNO_COMENTARIO_CARACTER) {
+                    token="Comentario";
                     color=Color.decode(COLOR_COMENTARIO);
                 }else if (palabra.charAt(0) == SIGNO_COMENTARIO_CARACTER && palabra.charAt(palabra.length()-1)== SIGNO_COMENTARIO_CARACTER) {
+                    token="Carácter";
                     color=Color.decode(COLOR_CARACTER);
                 }else if (!Character.isDigit(palabra.charAt(0))) {
+                    token="Identificador";
                     color=Color.decode(COLOR_IDENTIFICADOR);
-                }else if (palabra.equals("=")) {
-                    color=Color.decode(COLOR_ASIGNACION_SIMPLE);
                 }else{
                     JOptionPane.showMessageDialog(null, "Token no aceptado: " + palabra, "Error", JOptionPane.ERROR_MESSAGE);
                     return null;

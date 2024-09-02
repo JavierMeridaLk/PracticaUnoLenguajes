@@ -8,6 +8,7 @@ package Fronted;
 import Backen.Analizador;
 import Backen.Gestor;
 import java.awt.BorderLayout;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
 /**
@@ -27,6 +28,7 @@ public class ReportesDialog extends javax.swing.JDialog {
         this.setSize(750, 500);
         this.setLocationRelativeTo(null);
         this.setTitle("REPORTES");
+        this.pack();
         
     }
 
@@ -90,12 +92,13 @@ public class ReportesDialog extends javax.swing.JDialog {
      */
 
 public void agregarTabla(JTable tabla){
-    jPanel1.removeAll();
-    jPanel1.revalidate();
-    jPanel1.repaint();
-    jPanel1.add(tabla.getTableHeader(), BorderLayout.NORTH); // Agregar el encabezado de la tabla
-        jPanel1.add(tabla, BorderLayout.CENTER); 
-   
+    JScrollPane scrollPane = new JScrollPane(tabla);
+jPanel1.removeAll();
+jPanel1.setLayout(new BorderLayout());  // Asegura que el JScrollPane ocupe todo el espacio
+jPanel1.add(scrollPane, BorderLayout.CENTER);
+jPanel1.revalidate();
+jPanel1.repaint();
+this.pack();
 }
 
 
