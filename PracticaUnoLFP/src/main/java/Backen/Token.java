@@ -1,12 +1,38 @@
 package Backen;
 
+import guru.nidi.graphviz.engine.Format;
+import guru.nidi.graphviz.engine.Graphviz;
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Insets;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
-public class Token {
+public class Token extends JLabel{
+    
+    private static final String DOT_EXTENSION = ".dot";
+    private static final String PNG_EXTENSION = ".png";
+    private static final String FILE_PREFIX = "automata_";
     
     private final String COLOR_IDENTIFICADOR= "#FFD300";
     
@@ -54,17 +80,25 @@ public class Token {
     private String lexema;
     private String linea;
     private String columna;
-    private String filaCuadro;
-    private String columnaCuadro;
+    private int filaCuadro;
+    private int columnaCuadro;
     private Color color;
     
-    public Token(Gestor gestor){
+    public Token(String palabra){
         this.gestor=gestor;
+        addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    try {
+                        mostrarInformacion(palabra);
+                    } catch (IOException ex) {
+                        Logger.getLogger(Token.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
     }
     
     public JLabel nuevoToken(String palabra){
- 
-        JLabel label = new JLabel();
         
         lexema=palabra;
         
@@ -178,11 +212,12 @@ public class Token {
         }
         //personalizar el label segun su estilo y token
         Border border = BorderFactory.createLineBorder(Color.BLACK, 1); 
-        label.setBorder(border);
-        label.setOpaque(true);
-        label.setBackground(color);
-        return label;
+        this.setBorder(border);
+        this.setOpaque(true);
+        this.setBackground(color);
+        return this;
     }
+    
 
     public String getToken() {
         return token;
@@ -190,6 +225,14 @@ public class Token {
 
     public String getLexema() {
         return lexema;
+    }
+
+    public void setFilaCuadro(int filaCuadro) {
+        this.filaCuadro = filaCuadro;
+    }
+
+    public void setColumnaCuadro(int columnaCuadro) {
+        this.columnaCuadro = columnaCuadro;
     }
 
     public String getLinea() {
@@ -200,17 +243,98 @@ public class Token {
         return columna;
     }
 
-    public String getFilaCuadro() {
+    public int getFilaCuadro() {
         return filaCuadro;
     }
 
-    public String getColumnaCuadro() {
+    public int getColumnaCuadro() {
         return columnaCuadro;
     }
 
     public Color getColor() {
         return color;
     }
+    
+    public void mostrarInformacion(String token) throws IOException {
+        
+        File carpeta = new File("Autonomas");
+        // Crear la carpeta y sus subcarpetas si no existen 
+        if (!carpeta.exists()) {
+            carpeta.mkdirs(); 
+        }
+        String dotPath = carpeta.getPath() + File.separator + generarNombre(DOT_EXTENSION);
+        File imagen = new File(carpeta, generarNombre(PNG_EXTENSION));
+
+        // Crear el archivo DOT y renderizar la imagen
+        generarArchivo(token, dotPath);
+        Graphviz.fromFile(new File(dotPath)).render(Format.PNG).toFile(imagen);
+
+        // Verificar si el archivo PNG se ha creado correctamente
+        if (!imagen.exists()) {
+            throw new IOException("No se pudo crear el archivo de imagen PNG.");
+        }
+        generarDialog(imagen);
+
+    }
+
+    private String generarNombre(String extension) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
+        String fechaHora = LocalDateTime.now().format(formatter);
+        //return "automata_" + timestamp + extension;
+        return FILE_PREFIX + fechaHora + extension;
+    }
+
+    private void generarArchivo(String expresion, String dotPath) throws IOException {
+        String dotContent = generarCadena(expresion);
+
+        // Guardar el archivo DOT
+        try (FileWriter writer = new FileWriter(dotPath)) {
+            writer.write(dotContent);
+        }
+    }
+
+    private String generarCadena(String palabra) {
+        StringBuilder dot = new StringBuilder("digraph G {\n");
+        dot.append("rankdir=LR;\n"); // Dirección de izquierda a derecha
+
+        // Crear los nodos y las transiciones para el autómata
+        for (int i = 0; i < palabra.length(); i++) {
+            char caracter = palabra.charAt(i);
+            String label = remplazarCaracteres(String.valueOf(caracter));
+
+            dot.append("q").append(i)
+               .append(" -> q").append(i + 1)
+               .append(" [label=\"").append(label).append("\"];\n");
+        }
+        dot.append("q").append(palabra.length()).append(" [shape=doublecircle];\n"); // Estado final
+        dot.append("}");
+
+        return dot.toString();
+    }
+
+    private String remplazarCaracteres(String label) {
+        return label.replace("\"", "\\\"");
+    }
+    
+    private void generarDialog(File archivoImagen) {
+    // Crear el ImageIcon y el JLabel para la imagen
+    ImageIcon icon = new ImageIcon(archivoImagen.getAbsolutePath());
+    JLabel imageLabel = new JLabel(icon);
+    
+    // Crear el JLabel para la información
+    String texto = String.format("Fila y columna en la cuadricula: [%d, %d]", filaCuadro, columnaCuadro);
+    JLabel filaColumLabel = new JLabel(texto, SwingConstants.CENTER);
+
+    // Crear un panel para colocar la imagen y la información
+    JPanel panel = new JPanel(new BorderLayout());
+    panel.add(imageLabel, BorderLayout.CENTER);
+    panel.add(filaColumLabel, BorderLayout.SOUTH);
+
+    // Mostrar el JOptionPane con la información y la imagen
+    JOptionPane.showMessageDialog(null, panel, "AUTOMATA", JOptionPane.INFORMATION_MESSAGE);
+}
+
+   
     
     
 }

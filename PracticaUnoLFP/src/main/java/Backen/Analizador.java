@@ -114,7 +114,7 @@ int numColumns = layout.getColumns();
                 
                 
                 for (int i = 0; i < palabrasVerificadas.length; i++) {
-                    Token token = new Token(gestor);
+                    Token token = new Token(palabrasVerificadas[i]);
                     
                     
                     panel.add(token.nuevoToken(palabrasVerificadas[i]));
@@ -124,6 +124,8 @@ int numColumns = layout.getColumns();
                         col = 1;
                         row++;
                     }
+                    token.setColumnaCuadro(col);
+                    token.setFilaCuadro(row);
                     String color = String.format("#%02x%02x%02x", token.getColor().getRed(), token.getColor().getGreen(), token.getColor().getBlue());
                     Object[] newRow = {
             token.getToken(),
