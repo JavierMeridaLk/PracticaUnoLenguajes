@@ -1,0 +1,20 @@
+digraph G {
+rankdir=LR;
+q0 -> q1 [label="C"];
+q1 -> q2 [label="o"];
+q2 -> q3 [label="n"];
+q3 -> q4 [label="s"];
+q4 -> q5 [label="o"];
+q5 -> q6 [label="l"];
+q6 -> q7 [label="e"];
+q7 -> q8 [label="."];
+q8 -> q9 [label="R"];
+q9 -> q10 [label="e"];
+q10 -> q11 [label="a"];
+q11 -> q12 [label="d"];
+q12 -> q13 [label="L"];
+q13 -> q14 [label="i"];
+q14 -> q15 [label="n"];
+q15 -> q16 [label="e"];
+q16 [shape=doublecircle];
+}
