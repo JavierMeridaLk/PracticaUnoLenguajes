@@ -2,7 +2,6 @@ package Backen;
 
 import Fronted.ReportesDialog;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,7 +12,6 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
@@ -24,17 +22,11 @@ import javax.swing.table.TableColumn;
 public class Analizador {
     
     private String nombreDelArchivo;
-    private Gestor gestor;
     ReportesDialog reporte;
-    //JTable tabla;
           
     public Analizador(ReportesDialog reporte){
-        this.gestor=gestor;
-        this.reporte=reporte;
-        //dialog = new ReportesDialog(null,gestor);
         
-        
-        
+        this.reporte=reporte;   
     }
     
     public void analizarCodigoFuente(String texto, int cantidadDeToken, JPanel panel, JToggleButton boton,JToggleButton botonReporte){
@@ -42,14 +34,14 @@ public class Analizador {
         int row = 1; // Contador de filas
         int col = 0; // Contador de columnas
         GridLayout layout = (GridLayout) panel.getLayout();
-int numColumns = layout.getColumns();
+        int numColumns = layout.getColumns();//cantidad de columnas de la imagen
         
         if (!texto.isEmpty()) {
             // Obtener lineas y evaluar si es un comnetario o no, luego separar por palabras
             String[] lineas = texto.split("\n");
             String[] lineasSinEspacios =new String[lineas.length];
             
-             for (int i = 0; i < lineas.length; i++) {
+            for (int i = 0; i < lineas.length; i++) {
                 // Eliminar espacios al inicio y al final de cada línea y reemplazar múltiples espacios en blanco con uno solo
                 lineasSinEspacios[i] = lineas[i].trim().replaceAll("\\s+", " ");
                 if (!lineasSinEspacios[i].isEmpty() && lineasSinEspacios[i].charAt(0) == '\'') {
@@ -92,56 +84,54 @@ int numColumns = layout.getColumns();
                
             if (cantidadDeToken>=cantidadDePalabras) {
                 //realiza el analicis si la cantidad de token son igual o mayores a la cantidad de palabras ingresadas
+                //creaciond de la tabla y model para los reportes
                 String[] columnNames = {"Token", "Lexema", "Linea", "Columna", "Cuadro"};
                 DefaultTableModel model = new DefaultTableModel(columnNames , 0);
                 JTable tabla = new JTable(model);
                 tabla.setSize(740, 430);
-                //tabla.setEnabled(false);
-                
                 tabla.getColumnModel().getColumn(4).setCellRenderer(new EstiloTabla());
-                
                 TableColumn column;
+                tabla.setRowHeight(50);
+                //tamalo de las celdas de la tabla
                 for (int i = 0; i < tabla.getColumnCount(); i++) {
                     column = tabla.getColumnModel().getColumn(i);
-                    if (i == 4) { // La columna "Cuadro" con texto multilínea
-                        column.setPreferredWidth(250); // Ajusta el ancho según sea necesario
+                    if (i == 4) { 
+                        column.setPreferredWidth(250); 
                     } else {
-                        column.setPreferredWidth(200); // Ajusta el ancho de otras columnas según sea necesario
+                        column.setPreferredWidth(200);
                     }
                 }
-                // Ajusta el tamaño de las filas para permitir el texto multilínea
-                tabla.setRowHeight(50); // Ajusta el alto de las filas según sea necesario
-                
-                
+                  
                 for (int i = 0; i < palabrasVerificadas.length; i++) {
+                    //mandar las palbarsa a los token para que se generen
                     Token token = new Token(palabrasVerificadas[i]);
-                    
-                    
                     panel.add(token.nuevoToken(palabrasVerificadas[i]));
-                    // Actualizar los contadores
+                    // Actualizar los contadores de posiciones
                     col++;
-                    if (col == numColumns+1) { // Suponiendo 3 columnas
+                    if (col == numColumns+1) {
                         col = 1;
                         row++;
                     }
                     token.setColumnaCuadro(col);
                     token.setFilaCuadro(row);
+                    
                     String color = String.format("#%02x%02x%02x", token.getColor().getRed(), token.getColor().getGreen(), token.getColor().getBlue());
-                    Object[] newRow = {
-            token.getToken(),
-            token.getLexema(),
-            token.getLinea(),
-            token.getColumna(),
-            "Línea: " + row + "\n" +
-            "Columna: " + col + "\n" +
-            "Color: " + color
-        };
-        model.addRow(newRow);
-        panel.revalidate();
-        panel.repaint();
+                    Object[] newRow =   {
+                                            token.getToken(),
+                                            token.getLexema(),
+                                            token.getLinea(),
+                                            token.getColumna(),
+                                            "Línea: " + row + "\n" +
+                                            "Columna: " + col + "\n" +
+                                            "Color: " + color
+                                        };
+                    model.addRow(newRow);
+                    panel.revalidate();
+                    panel.repaint();
                 }
                 
                 reporte.agregarTabla(tabla);
+                
                 if (cantidadDePalabras < cantidadDeToken ) {
                     //rellenar de label vacias si las palabras son menores a la cantidad de token
                     for (int i = 0; i < (cantidadDeToken-cantidadDePalabras); i++) {
@@ -183,8 +173,7 @@ int numColumns = layout.getColumns();
             File archivo = fileChooser.getSelectedFile();
             nombreDelArchivo= archivo.getName();
             return archivo;
-        } else {
-            
+        } else {    
             JOptionPane.showMessageDialog(null, "No se seleccionó ningún archivo.", "Advertencia", JOptionPane.WARNING_MESSAGE);
         }
     
@@ -212,10 +201,5 @@ int numColumns = layout.getColumns();
             e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Error al leer el archivo: ", "Error", JOptionPane.ERROR_MESSAGE);
         }
-    }
-
-    
-
-    
-    
+    }   
 }

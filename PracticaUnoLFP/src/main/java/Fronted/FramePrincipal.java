@@ -1,7 +1,6 @@
 package Fronted;
 
 import Backen.Analizador;
-import Backen.Gestor;
 import Backen.Imagen;
 import java.awt.Color;
 import javax.swing.JTextPane;
@@ -14,28 +13,22 @@ public class FramePrincipal extends javax.swing.JFrame {
 
     private int cantidadDeTokens;
     private Analizador analizador;
-    private Gestor gestor;
     private ReportesDialog reporte;
     
-    public FramePrincipal(Gestor gestor) {
+    public FramePrincipal() {
         
         this.setSize(986, 640);
         this.setLocationRelativeTo(null);
         this.setTitle("ANALIZADOR LEXICO");
-        this.gestor=gestor;
-        
         
         initComponents();
         
         reporte = new ReportesDialog();
-        
-        cantidadDeTokens=0;
-        panelTexto.setEditable(false);
-        this.analizador = new Analizador(reporte);
-        botonExportar.setEnabled(false);
-        botonReportes.setEnabled(false);
         TextPanelLineas.setEditable(false);
         TextPanelLineas.setForeground(Color.LIGHT_GRAY);
+        this.analizador = new Analizador(reporte);
+        
+        limpiar();
 
         panelTexto.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -287,6 +280,7 @@ public class FramePrincipal extends javax.swing.JFrame {
 
     private void limpiar(){
         //metodo para limpiar componentes
+        cantidadDeTokens=0;
         LabelColumna.setText("");
         LabelFila.setText("");
         tamañoLabel.setText("");
@@ -297,6 +291,7 @@ public class FramePrincipal extends javax.swing.JFrame {
         TextPanelLineas.setText("");  
         botonExportar.setEnabled(false);
         botonReportes.setEnabled(false);
+        panelTexto.setEditable(false);
     }
     
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
@@ -310,7 +305,6 @@ public class FramePrincipal extends javax.swing.JFrame {
         //crear reportes
         Imagen imagen = new Imagen();
         int[] posiciones = imagen.crearCuadricula(ImgPanel);
-        
         this.add(ImgPanel);
         tamañoLabel.setText(posiciones[0] + "x" + posiciones[1]);
         cantidadDeTokens= posiciones[0]*posiciones[1];
@@ -333,14 +327,9 @@ public class FramePrincipal extends javax.swing.JFrame {
 
     private void botonReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonReportesActionPerformed
         //Boton para abrir reporters
-        
-        this.reporte.setVisible(true);
-        
+        this.reporte.setVisible(true); 
     }//GEN-LAST:event_botonReportesActionPerformed
 
-    
-    
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel ImgPanel;
     private javax.swing.JLabel LabelColumna;

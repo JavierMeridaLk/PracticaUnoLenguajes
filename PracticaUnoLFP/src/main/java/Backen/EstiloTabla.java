@@ -15,6 +15,7 @@ import javax.swing.table.DefaultTableCellRenderer;
  * @author xavi
  */
 public class EstiloTabla extends DefaultTableCellRenderer {
+    //clase necesaria para cambiar le diseño y formato de la tabla de reportes
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value,
                                                    boolean isSelected, boolean hasFocus,

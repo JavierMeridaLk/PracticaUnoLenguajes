@@ -4,12 +4,6 @@ import guru.nidi.graphviz.engine.Format;
 import guru.nidi.graphviz.engine.Graphviz;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -24,7 +18,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 import javax.swing.border.Border;
 
@@ -75,7 +68,6 @@ public class Token extends JLabel{
     
     private final char SIGNO_COMENTARIO_CARACTER = '\'' ;
     
-    private Gestor gestor;
     private String token;
     private String lexema;
     private String linea;
@@ -85,7 +77,7 @@ public class Token extends JLabel{
     private Color color;
     
     public Token(String palabra){
-        this.gestor=gestor;
+
         addMouseListener(new MouseAdapter() {
                 @Override
                 public void mouseClicked(MouseEvent e) {
@@ -218,7 +210,6 @@ public class Token extends JLabel{
         return this;
     }
     
-
     public String getToken() {
         return token;
     }
@@ -262,31 +253,27 @@ public class Token extends JLabel{
         if (!carpeta.exists()) {
             carpeta.mkdirs(); 
         }
+        //crear el path
         String dotPath = carpeta.getPath() + File.separator + generarNombre(DOT_EXTENSION);
         File imagen = new File(carpeta, generarNombre(PNG_EXTENSION));
-
         // Crear el archivo DOT y renderizar la imagen
         generarArchivo(token, dotPath);
         Graphviz.fromFile(new File(dotPath)).render(Format.PNG).toFile(imagen);
-
         // Verificar si el archivo PNG se ha creado correctamente
         if (!imagen.exists()) {
             throw new IOException("No se pudo crear el archivo de imagen PNG.");
         }
         generarDialog(imagen);
-
     }
 
     private String generarNombre(String extension) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss");
         String fechaHora = LocalDateTime.now().format(formatter);
-        //return "automata_" + timestamp + extension;
         return FILE_PREFIX + fechaHora + extension;
     }
 
     private void generarArchivo(String expresion, String dotPath) throws IOException {
         String dotContent = generarCadena(expresion);
-
         // Guardar el archivo DOT
         try (FileWriter writer = new FileWriter(dotPath)) {
             writer.write(dotContent);
@@ -296,12 +283,10 @@ public class Token extends JLabel{
     private String generarCadena(String palabra) {
         StringBuilder dot = new StringBuilder("digraph G {\n");
         dot.append("rankdir=LR;\n"); // Dirección de izquierda a derecha
-
         // Crear los nodos y las transiciones para el autómata
         for (int i = 0; i < palabra.length(); i++) {
             char caracter = palabra.charAt(i);
             String label = remplazarCaracteres(String.valueOf(caracter));
-
             dot.append("q").append(i)
                .append(" -> q").append(i + 1)
                .append(" [label=\"").append(label).append("\"];\n");
@@ -317,25 +302,17 @@ public class Token extends JLabel{
     }
     
     private void generarDialog(File archivoImagen) {
-    // Crear el ImageIcon y el JLabel para la imagen
-    ImageIcon icon = new ImageIcon(archivoImagen.getAbsolutePath());
-    JLabel imageLabel = new JLabel(icon);
-    
-    // Crear el JLabel para la información
-    String texto = String.format("Fila y columna en la cuadricula: [%d, %d]", filaCuadro, columnaCuadro);
-    JLabel filaColumLabel = new JLabel(texto, SwingConstants.CENTER);
-
-    // Crear un panel para colocar la imagen y la información
-    JPanel panel = new JPanel(new BorderLayout());
-    panel.add(imageLabel, BorderLayout.CENTER);
-    panel.add(filaColumLabel, BorderLayout.SOUTH);
-
-    // Mostrar el JOptionPane con la información y la imagen
-    JOptionPane.showMessageDialog(null, panel, "AUTOMATA", JOptionPane.INFORMATION_MESSAGE);
+        // Crear el ImageIcon y el JLabel para la imagen
+        ImageIcon icon = new ImageIcon(archivoImagen.getAbsolutePath());
+        JLabel imageLabel = new JLabel(icon);
+        // Crear el JLabel para la información
+        String texto = String.format("Fila y columna en la cuadricula: [%d, %d]", filaCuadro, columnaCuadro);
+        JLabel filaColumLabel = new JLabel(texto, SwingConstants.CENTER);
+        // Crear un panel para colocar la imagen y la información
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.add(imageLabel, BorderLayout.CENTER);
+        panel.add(filaColumLabel, BorderLayout.SOUTH);
+        // Mostrar el JOptionPane con la información y la imagen
+        JOptionPane.showMessageDialog(null, panel, "AUTOMATA", JOptionPane.INFORMATION_MESSAGE);
+    } 
 }
-
-   
-    
-    
-}
-
