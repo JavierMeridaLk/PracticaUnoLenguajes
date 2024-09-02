@@ -1,6 +1,7 @@
 package Fronted;
 
 import Backen.Analizador;
+import Backen.Gestor;
 import Backen.Imagen;
 import java.awt.Color;
 import javax.swing.JTextPane;
@@ -13,20 +14,26 @@ public class FramePrincipal extends javax.swing.JFrame {
 
     private int cantidadDeTokens;
     private Analizador analizador;
+    private Gestor gestor;
+    private ReportesDialog reporte;
     
-    public FramePrincipal() {
+    public FramePrincipal(Gestor gestor) {
         
         this.setSize(986, 640);
         this.setLocationRelativeTo(null);
         this.setTitle("ANALIZADOR LEXICO");
+        this.gestor=gestor;
         
         
         initComponents();
         
+        reporte = new ReportesDialog();
+        
         cantidadDeTokens=0;
         panelTexto.setEditable(false);
-        this.analizador = new Analizador();
+        this.analizador = new Analizador(reporte);
         botonExportar.setEnabled(false);
+        botonReportes.setEnabled(false);
         TextPanelLineas.setEditable(false);
         TextPanelLineas.setForeground(Color.LIGHT_GRAY);
 
@@ -99,6 +106,7 @@ public class FramePrincipal extends javax.swing.JFrame {
         LabelColumna = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         TextPanelLineas = new javax.swing.JTextPane();
+        botonReportes = new javax.swing.JToggleButton();
 
         jLabel5.setText("jLabel5");
 
@@ -168,6 +176,14 @@ public class FramePrincipal extends javax.swing.JFrame {
 
         jScrollPane2.setViewportView(TextPanelLineas);
 
+        botonReportes.setFont(new java.awt.Font("Century Gothic", 2, 15)); // NOI18N
+        botonReportes.setText("Reportes");
+        botonReportes.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonReportesActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -186,7 +202,9 @@ public class FramePrincipal extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jToggleButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(botonExportar))
+                        .addComponent(botonExportar)
+                        .addGap(18, 18, 18)
+                        .addComponent(botonReportes))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
@@ -226,7 +244,8 @@ public class FramePrincipal extends javax.swing.JFrame {
                     .addComponent(jToggleButton1)
                     .addComponent(jToggleButton3)
                     .addComponent(jToggleButton4)
-                    .addComponent(botonExportar))
+                    .addComponent(botonExportar)
+                    .addComponent(botonReportes))
                 .addGap(17, 17, 17)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel2)
@@ -276,6 +295,8 @@ public class FramePrincipal extends javax.swing.JFrame {
         ImgPanel.repaint();
         panelTexto.setText("");  
         TextPanelLineas.setText("");  
+        botonExportar.setEnabled(false);
+        botonReportes.setEnabled(false);
     }
     
     private void jToggleButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton1ActionPerformed
@@ -286,7 +307,7 @@ public class FramePrincipal extends javax.swing.JFrame {
     private void iniciarTablero(){
         //metodo para iniciar tablero atra vex de la clase imagen
         limpiar();
-        
+        //crear reportes
         Imagen imagen = new Imagen();
         int[] posiciones = imagen.crearCuadricula(ImgPanel);
         
@@ -301,7 +322,7 @@ public class FramePrincipal extends javax.swing.JFrame {
         //Boton para analizar el codigo fuente
         ImgPanel.removeAll();
         String texto = panelTexto.getText().trim();
-        analizador.analizarCodigoFuente(texto,cantidadDeTokens,ImgPanel,botonExportar);
+        analizador.analizarCodigoFuente(texto,cantidadDeTokens,ImgPanel,botonExportar,botonReportes);
     }//GEN-LAST:event_jToggleButton3ActionPerformed
 
     private void jToggleButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jToggleButton4ActionPerformed
@@ -309,12 +330,24 @@ public class FramePrincipal extends javax.swing.JFrame {
         iniciarTablero();
         analizador.leer(panelTexto); 
     }//GEN-LAST:event_jToggleButton4ActionPerformed
+
+    private void botonReportesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonReportesActionPerformed
+        //Boton para abrir reporters
+        
+        this.reporte.setVisible(true);
+        
+    }//GEN-LAST:event_botonReportesActionPerformed
+
+    
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel ImgPanel;
     private javax.swing.JLabel LabelColumna;
     private javax.swing.JLabel LabelFila;
     private javax.swing.JTextPane TextPanelLineas;
     private javax.swing.JToggleButton botonExportar;
+    private javax.swing.JToggleButton botonReportes;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

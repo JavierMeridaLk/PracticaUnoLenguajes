@@ -49,19 +49,25 @@ public class Token {
     
     private final char SIGNO_COMENTARIO_CARACTER = '\'' ;
     
-    private String tipo;
+    private Gestor gestor;
+    private String token;
+    private String lexema;
+    private String linea;
     private String columna;
-    private String fila;
+    private String filaCuadro;
+    private String columnaCuadro;
     private Color color;
     
-    public Token(){
-        
+    public Token(Gestor gestor){
+        this.gestor=gestor;
     }
     
     public JLabel nuevoToken(String palabra){
  
         JLabel label = new JLabel();
-                    
+        
+        lexema=palabra;
+        
         try {
             Integer.parseInt(palabra);
             color = Color.decode(COLOR_ENTERO);
@@ -70,16 +76,23 @@ public class Token {
             try {
                 Double.parseDouble(palabra);
                 color = Color.decode(COLOR_DECIMAL);
-            } catch (NumberFormatException e2) {
+                token="";
+                } catch (NumberFormatException e2) {
+                    
                 if (palabra.equalsIgnoreCase("+")) {
                     color = Color.decode(COLOR_SUMA);
+                    token="Suma";
                 }else if (palabra.equals("-")) {
                     color=Color.decode(COLOR_RESTA);
+                    token="Resta";
                 }else if (palabra.equals("^")) {
                     color=Color.decode(COLOR_EXPONENTE);
+                    token="Exponnte";
                 }else if (palabra.equals("/")) {
+                    token="Division";
                     color=Color.decode(COLOR_DIVISION);
                 }else if (palabra.equals("Mod")) {
+                    token="Modulo";
                     color=Color.decode(COLOR_MODULO);
                 }else if (palabra.equals("*")) {
                     color=Color.decode(COLOR_MULTIPLICACION);
@@ -148,5 +161,35 @@ public class Token {
         label.setBackground(color);
         return label;
     }
+
+    public String getToken() {
+        return token;
+    }
+
+    public String getLexema() {
+        return lexema;
+    }
+
+    public String getLinea() {
+        return linea;
+    }
+
+    public String getColumna() {
+        return columna;
+    }
+
+    public String getFilaCuadro() {
+        return filaCuadro;
+    }
+
+    public String getColumnaCuadro() {
+        return columnaCuadro;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+    
+    
 }
 

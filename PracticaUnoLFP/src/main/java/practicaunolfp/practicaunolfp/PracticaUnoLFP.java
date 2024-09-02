@@ -4,6 +4,7 @@
 
 package practicaunolfp.practicaunolfp;
 
+import Backen.Gestor;
 import Fronted.FramePrincipal;
 
 /**
@@ -14,8 +15,9 @@ public class PracticaUnoLFP {
 
        
    public static void main(String[] args) {
-
-        FramePrincipal frame = new FramePrincipal();
-        frame.setVisible(true);
+   
+       Gestor gestor = new Gestor();
+       FramePrincipal frame = new FramePrincipal(gestor);
+       frame.setVisible(true);
     }
 }
