@@ -3,6 +3,7 @@ package Backen;
 import Fronted.ReportesDialog;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -18,6 +19,7 @@ import javax.swing.JTextPane;
 import javax.swing.JToggleButton;
 import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 public class Analizador {
     
@@ -36,6 +38,11 @@ public class Analizador {
     }
     
     public void analizarCodigoFuente(String texto, int cantidadDeToken, JPanel panel, JToggleButton boton,JToggleButton botonReporte){
+        
+        int row = 1; // Contador de filas
+        int col = 0; // Contador de columnas
+        GridLayout layout = (GridLayout) panel.getLayout();
+int numColumns = layout.getColumns();
         
         if (!texto.isEmpty()) {
             // Obtener lineas y evaluar si es un comnetario o no, luego separar por palabras
@@ -89,18 +96,49 @@ public class Analizador {
                 DefaultTableModel model = new DefaultTableModel(columnNames , 0);
                 JTable tabla = new JTable(model);
                 tabla.setSize(740, 430);
-                tabla.setEnabled(false);
+                //tabla.setEnabled(false);
                 
+                tabla.getColumnModel().getColumn(4).setCellRenderer(new EstiloTabla());
+                
+                TableColumn column;
+                for (int i = 0; i < tabla.getColumnCount(); i++) {
+                    column = tabla.getColumnModel().getColumn(i);
+                    if (i == 4) { // La columna "Cuadro" con texto multilínea
+                        column.setPreferredWidth(250); // Ajusta el ancho según sea necesario
+                    } else {
+                        column.setPreferredWidth(200); // Ajusta el ancho de otras columnas según sea necesario
+                    }
+                }
+                // Ajusta el tamaño de las filas para permitir el texto multilínea
+                tabla.setRowHeight(50); // Ajusta el alto de las filas según sea necesario
                 
                 
                 for (int i = 0; i < palabrasVerificadas.length; i++) {
                     Token token = new Token(gestor);
+                    
+                    
                     panel.add(token.nuevoToken(palabrasVerificadas[i]));
-                    Object[] newRow = {token.getToken(),token.getLexema(), token.getLinea(), token.getColumna(), "Primera línea\nSegunda línea\nTercera línea"};
-                    model.addRow(newRow);
-                    panel.revalidate();
-                    panel.repaint();   
+                    // Actualizar los contadores
+                    col++;
+                    if (col == numColumns+1) { // Suponiendo 3 columnas
+                        col = 1;
+                        row++;
+                    }
+                    String color = String.format("#%02x%02x%02x", token.getColor().getRed(), token.getColor().getGreen(), token.getColor().getBlue());
+                    Object[] newRow = {
+            token.getToken(),
+            token.getLexema(),
+            token.getLinea(),
+            token.getColumna(),
+            "Línea: " + row + "\n" +
+            "Columna: " + col + "\n" +
+            "Color: " + color
+        };
+        model.addRow(newRow);
+        panel.revalidate();
+        panel.repaint();
                 }
+                
                 reporte.agregarTabla(tabla);
                 if (cantidadDePalabras < cantidadDeToken ) {
                     //rellenar de label vacias si las palabras son menores a la cantidad de token
